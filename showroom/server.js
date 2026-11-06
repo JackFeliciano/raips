@@ -26,6 +26,7 @@ const HOST = process.env.RAIPS_HOST ?? '127.0.0.1';
 const DATA = process.env.RAIPS_DATA ?? path.join(root, '.data');
 const SITE = process.env.RAIPS_SITE ? path.resolve(process.env.RAIPS_SITE) : here;
 const KEY = process.env.RAIPS_KEY ?? 'demo-key';
+const BASE = process.env.RAIPS_BASE ?? '/';
 
 const runs = path.join(DATA, 'runs');
 const liveDir = path.join(runs, 'live');
@@ -143,7 +144,7 @@ function landingPages() {
 }
 
 function writeSite(dir, pages) {
-  const built = buildSite({ name: 'raips-demo', pages });
+  const built = buildSite({ name: 'raips-demo', base: BASE, pages });
   const files = [{ path: 'assets/site.css', body: renderStylesheet() }, ...built.files];
   const base = path.resolve(dir);
   for (const f of files) {

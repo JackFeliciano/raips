@@ -25,7 +25,7 @@ test('builder: a good page renders a document with the title and the section', (
   assert.match(html, /<title>Title<\/title>/);
   assert.match(html, /content="A description"/);
   assert.match(html, /<h1>Hello<\/h1>/);
-  assert.match(html, /\/assets\/site\.css/);
+  assert.match(html, /href="assets\/site\.css"/);
 });
 
 test('builder: a missing route, title or section list fails with a named problem', () => {
@@ -86,4 +86,20 @@ test('builder: the stylesheet is a string with a rule for every class the templa
   for (const cls of ['.r-hero', '.r-pricing', '.r-faq', '.r-footer']) {
     assert.ok(css.includes(cls), cls);
   }
+});
+
+test('builder: a site that names a base puts it in front of every relative URL', () => {
+  const html = renderPage(
+    {
+      route: '/',
+      title: 'Base',
+      sections: [{ type: 'hero', props: { heading: 'Base' } }],
+    },
+    { base: '/raips/' },
+  );
+  assert.match(html, /<base href="\/raips\/">/);
+  assert.match(html, /href="assets\/site.css"/);
+
+  const dflt = renderPage({ route: '/', title: 'Plain', sections: [{ type: 'hero', props: { heading: 'Plain' } }] });
+  assert.match(dflt, /<base href="\/">/);
 });

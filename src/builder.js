@@ -52,6 +52,7 @@ export function renderPage(page, site = {}) {
   if (problems.length > 0) throw new BuildError(problems);
   const lang = page.lang ?? site.lang ?? 'en';
   const description = page.description ?? site.description ?? '';
+  const base = site.base ?? '/';
   const body = renderSections(page.sections);
   return `<!doctype html>
 <html lang="${esc(lang)}">
@@ -60,7 +61,8 @@ export function renderPage(page, site = {}) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${esc(page.title)}</title>
     ${description ? `<meta name="description" content="${esc(description)}">` : ''}
-    <link rel="stylesheet" href="/assets/site.css">
+    <base href="${esc(base.endsWith('/') ? base : base + '/')}">
+    <link rel="stylesheet" href="assets/site.css">
   </head>
   <body>
     ${body}
