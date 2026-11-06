@@ -1,12 +1,8 @@
 # raips
 
-A small website system. It reads a JSON description of a site, renders pages
-from a fixed set of section templates, previews the result on a local port, and
-publishes the built files to a hosting panel over signed HTTP. It also asks a
-registrar which domain names are free.
+RAIPS is a small website system built in plain PHP 8.2. It reads a JSON description of a site, turns its pages and sections into HTML, and writes the finished files to disk. It previews each build on a local port with the correct content types, so changes can be checked in a browser. RAIPS also publishes files to a hosting panel through signed HTTP requests and checks domain availability, prices and premium status through a registrar.
 
-Plain PHP 8.2. No Composer, no vendor directory, no dependencies outside the
-extensions that ship with PHP. The test runner is a file in `tests/`.
+RAIPS builds websites from site.json, using thirteen section templates that produce deterministic HTML. It previews each build on a loopback port with correct content types. It publishes files through signed HTTP requests, with three drivers for tests, HTTP and hosting panels. It also queries a registrar for available domain names, their prices and their premium status.
 
 ## What it does
 
