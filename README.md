@@ -98,7 +98,7 @@ A page needs a `route`, a `title` and at least one section. A route that walks o
 
 ## The tests
 
-`npm test` runs 47 checks across six files.
+`npm test` runs 48 checks across six files.
 
 - `test/sections.test.js` covers each template and the escaping.
 - `test/builder.test.js` covers validation, routing and the shared stylesheet.
@@ -116,6 +116,16 @@ RAIPS_PORT=8093 RAIPS_HOST=127.0.0.1 RAIPS_DATA=/var/lib/raips RAIPS_SITE=/srv/r
 ```
 
 The data directory holds one directory per press. Nothing outside it is written.
+
+Four variables set the box and a fifth is optional:
+
+| Variable | Meaning |
+|---|---|
+| `RAIPS_PORT` | Listening port. Defaults to 8093. |
+| `RAIPS_HOST` | Bind address. Defaults to 127.0.0.1. |
+| `RAIPS_DATA` | Directory that holds one folder per press. |
+| `RAIPS_SITE` | Directory that holds `demo.html`. |
+| `RAIPS_BASE` | Path the site is served under. Defaults to `/`, set to `/raips/` when a proxy strips a prefix. |
 
 ## Layout
 
