@@ -130,7 +130,7 @@ final class Server
                     ['type' => 'hero', 'props' => [
                         'eyebrow' => 'Website system',
                         'heading' => 'A page written as JSON, published to a panel',
-                        'lead' => 'This page came out of the builder in this repository. Every section on it is a template taking props, and the publish step signs what it sends.',
+                        'lead' => 'RAIPS is a small website system built in plain PHP 8.2. It reads a JSON description of a site, turns its pages and sections into HTML, and writes the finished files to disk. It previews each build on a local port with the correct content types, so changes can be checked in a browser. RAIPS also publishes files to a hosting panel through signed HTTP requests and checks domain availability, prices and premium status through a registrar.',
                         'buttons' => [
                             ['label' => 'Build a page', 'href' => 'demo/', 'style' => 'primary'],
                             ['label' => 'Read the code', 'href' => 'https://github.com/JackFeliciano/raips', 'style' => 'secondary'],
@@ -153,7 +153,7 @@ final class Server
                     ]],
                     ['type' => 'cta', 'props' => [
                         'heading' => 'Watch it build',
-                        'text' => 'The demo builds a page from whichever template you pick and puts it on this host.',
+                        'text' => 'RAIPS builds websites from JSON descriptions with thirteen deterministic PHP templates. It previews builds locally, publishes files through signed HTTP requests and checks domain availability and prices through a registrar. The repository includes three publishing drivers, a PHP unit suite and a live demo. It runs on PHP 8.2 without Composer or external dependencies.',
                         'cta' => 'Open the demo',
                         'href' => 'demo/',
                     ]],
