@@ -12,6 +12,7 @@ Environment=RAIPS_PORT=8093
 Environment=RAIPS_HOST=127.0.0.1
 Environment=RAIPS_DATA=/var/lib/raips
 Environment=RAIPS_SITE=/srv/raips/showroom
+Environment=RAIPS_BASE=/raips/
 ExecStart=/usr/bin/node /srv/raips/showroom/server.js
 Restart=always
 RestartSec=3
