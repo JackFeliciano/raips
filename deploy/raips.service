@@ -5,8 +5,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=raips
-Group=raips
+User=opc
+Group=opc
 WorkingDirectory=/srv/raips
 Environment=RAIPS_PORT=8093
 Environment=RAIPS_HOST=127.0.0.1
