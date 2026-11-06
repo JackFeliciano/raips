@@ -100,11 +100,24 @@ exercised end to end rather than against a stub.
 src/            the library, one class per file
 src/Hosting/    three drivers behind one interface
 src/Domains/    registrar drivers and the search panel
+src/Showroom/   the live box that answers on four paths
 bin/raips       the command line
+showroom/       the demo page and the front controller
 examples/site/  a small site that doubles as an acceptance test
 tests/          the runner and the checks
 deploy/         a systemd unit and an nginx block
 ```
+
+## The showroom
+
+```sh
+RAIPS_SITE=showroom RAIPS_BASE=/raips/ php -S 127.0.0.1:8093 -t showroom showroom/index.php
+```
+
+One process on the built-in server answers on four paths: the built site at
+`/`, a demo page at `/demo/` that builds a page from a template the visitor
+picks, the run it produced at `/run/<id>/`, and `/health`. Each press writes
+into its own folder under the data directory, so two presses never collide.
 
 ## Licence
 
