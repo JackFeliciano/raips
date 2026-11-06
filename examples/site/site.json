@@ -1,0 +1,133 @@
+{
+  "name": "example-site",
+  "description": "A site built from RAIPS section templates.",
+  "lang": "en",
+  "pages": [
+    {
+      "route": "/",
+      "title": "Example site",
+      "description": "One page assembled from section templates.",
+      "sections": [
+        {
+          "type": "header",
+          "props": {
+            "brand": "Example",
+            "links": [
+              { "label": "Features", "href": "#features" },
+              { "label": "Pricing", "href": "#pricing" }
+            ],
+            "cta": { "label": "Start", "href": "#contact" }
+          }
+        },
+        {
+          "type": "hero",
+          "props": {
+            "eyebrow": "Section templates",
+            "heading": "A page written as data",
+            "lead": "The builder reads this file and returns HTML. No template language, no build server.",
+            "buttons": [
+              { "label": "Read the tests", "href": "#features", "style": "primary" },
+              { "label": "Preview", "href": "#contact", "style": "secondary" }
+            ]
+          }
+        },
+        {
+          "type": "overview",
+          "props": {
+            "heading": "What is here",
+            "items": [
+              "Thirteen section templates, each one a plain function.",
+              "A builder that rejects an unknown section before it renders anything.",
+              "A publish step that signs every request to the hosting panel."
+            ]
+          }
+        },
+        {
+          "type": "features",
+          "props": {
+            "heading": "Features",
+            "items": [
+              { "title": "Builder", "text": "Page JSON in, HTML files out." },
+              { "title": "Preview", "text": "A local server over the built output." },
+              { "title": "Publish", "text": "Signed requests to the hosting API." }
+            ]
+          }
+        },
+        {
+          "type": "pricing",
+          "props": {
+            "heading": "Plans",
+            "plans": [
+              { "name": "Single", "price": "One site", "note": "Builder and preview.", "href": "#contact" },
+              { "name": "Fleet", "price": "Many sites", "note": "Publish to a panel.", "href": "#contact", "featured": true }
+            ]
+          }
+        },
+        {
+          "type": "testimonials",
+          "props": {
+            "heading": "Quotes",
+            "items": [
+              { "text": "The page is data and the tests run in a second.", "author": "A maintainer", "role": "example" }
+            ]
+          }
+        },
+        {
+          "type": "faq",
+          "props": {
+            "heading": "Questions",
+            "items": [
+              { "q": "Where do the hosting keys live?", "a": "In raips.config.json, which stays out of git." },
+              { "q": "Can I publish without a credential?", "a": "The fake driver accepts a publish and keeps it on disk." }
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "props": {
+            "heading": "Ready to publish",
+            "text": "Fill the sample config and run the publish verb.",
+            "cta": "Contact",
+            "href": "#contact"
+          }
+        },
+        {
+          "type": "contact",
+          "props": {
+            "heading": "Contact",
+            "cta": "Send"
+          }
+        },
+        {
+          "type": "footer",
+          "props": {
+            "brand": "Example",
+            "links": [{ "label": "Top", "href": "#" }],
+            "social": [{ "label": "Repository", "href": "https://example.invalid/repo" }],
+            "legal": "Example content.",
+            "copyright": "Example site."
+          }
+        }
+      ]
+    },
+    {
+      "route": "/about",
+      "title": "About the example",
+      "description": "The second page of the sample site.",
+      "sections": [
+        { "type": "header", "props": { "brand": "Example", "links": [{ "label": "Home", "href": "/" }] } },
+        {
+          "type": "about",
+          "props": {
+            "heading": "About",
+            "paragraphs": [
+              "Every section on this page comes from a function in src/sections.",
+              "The builder renders the same way for one page and for fifty."
+            ]
+          }
+        },
+        { "type": "footer", "props": { "brand": "Example", "copyright": "Example site." } }
+      ]
+    }
+  ]
+}

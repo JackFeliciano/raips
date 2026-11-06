@@ -1,0 +1,27 @@
+{
+  "name": "raips",
+  "version": "0.1.0",
+  "description": "Website builder, section templates, preview and publish step for sites that live on remote hosting.",
+  "license": "MPL-2.0",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./hosting": "./src/hosting/index.js"
+  },
+  "bin": "./bin/raips.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "preview": "node bin/raips.js preview examples/site",
+    "publish": "node bin/raips.js publish examples/site"
+  }
+}
