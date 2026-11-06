@@ -130,7 +130,7 @@ final class Server
                     ['type' => 'hero', 'props' => [
                         'eyebrow' => 'Website system',
                         'heading' => 'A page written as JSON, published to a panel',
-                        'lead' => 'RAIPS is a small website system built in plain PHP 8.2. It reads a JSON description of a site, turns its pages and sections into HTML, and writes the finished files to disk. It previews each build on a local port with the correct content types, so changes can be checked in a browser. RAIPS also publishes files to a hosting panel through signed HTTP requests and checks domain availability, prices and premium status through a registrar.',
+                        'subheading' => 'RAIPS is a small website system built in plain PHP 8.2. It reads a JSON description of a site, turns its pages and sections into HTML, and writes the finished files to disk. It previews each build on a local port with the correct content types, so changes can be checked in a browser. RAIPS also publishes files to a hosting panel through signed HTTP requests and checks domain availability, prices and premium status through a registrar.',
                         'buttons' => [
                             ['label' => 'Build a page', 'href' => 'demo/', 'style' => 'primary'],
                             ['label' => 'Read the code', 'href' => 'https://github.com/JackFeliciano/raips', 'style' => 'secondary'],
