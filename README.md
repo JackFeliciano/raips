@@ -98,13 +98,24 @@ A page needs a `route`, a `title` and at least one section. A route that walks o
 
 ## The tests
 
-`npm test` runs 43 checks across five files.
+`npm test` runs 47 checks across six files.
 
 - `test/sections.test.js` covers each template and the escaping.
 - `test/builder.test.js` covers validation, routing and the shared stylesheet.
 - `test/crypto.test.js` covers the signature, the body digest and the clock window.
 - `test/publish.test.js` publishes to a fake host on disk and reads the files back.
 - `test/http.test.js` starts the fake hosting server on a port, publishes over real HTTP, and checks that a wrong key, a tampered signature and a stale timestamp each get a 401.
+- `test/serve.test.js` covers the static server the live box uses, including the paths it refuses.
+
+## The live box
+
+`showroom/server.js` is a single process that serves a site the builder rendered on start, offers a page that builds a new site from a section template on a visitor's press, and serves the result at `/run/<id>/`. It runs behind a proxy and binds loopback.
+
+```
+RAIPS_PORT=8093 RAIPS_HOST=127.0.0.1 RAIPS_DATA=/var/lib/raips RAIPS_SITE=/srv/raips/showroom node showroom/server.js
+```
+
+The data directory holds one directory per press. Nothing outside it is written.
 
 ## Layout
 
@@ -118,6 +129,8 @@ A page needs a `route`, a `title` and at least one section. A route that walks o
 | `src/hosting/` | The fake host, the HTTP client, the null driver, the fake server. |
 | `src/publish.js` | The publish step and the file collection. |
 | `src/preview.js` | The preview writer and the loopback server. |
+| `src/serve.js` | The static file server the live box and a preview share. |
+| `showroom/` | The live box: one process, the landing site and the demo. |
 | `bin/raips.js` | The command line: build, preview, publish. |
 | `examples/site/` | A two-page example project. |
 

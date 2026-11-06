@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAIPS demo</title>
+<meta name="description" content="Build a page from a section template and publish it on this host.">
+<style>
+  :root { color-scheme: light; --crimson: #880000; --ink: #1c1c1a; --line: #dcd8d0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, sans-serif; line-height: 1.55; color: var(--ink); background: #fbfaf7; }
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--line); }
+  header.top a { color: var(--crimson); text-decoration: none; font-weight: 600; }
+  main { max-width: 58rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  h1 { font-size: 1.9rem; margin: 0 0 .5rem; color: var(--crimson); }
+  p.lead { margin: 0 0 1.5rem; font-size: 1.05rem; }
+  .grid { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0 1.5rem; }
+  button { font: inherit; padding: .5rem .9rem; border: 1px solid var(--crimson); background: #fff; color: var(--crimson); border-radius: 4px; cursor: pointer; }
+  button:hover { background: var(--crimson); color: #fff; }
+  button:disabled { opacity: .5; cursor: progress; }
+  #out { border: 1px solid var(--line); border-radius: 6px; padding: 1rem; background: #fff; min-height: 5rem; }
+  #out a { color: var(--crimson); }
+  pre { margin: 0; overflow-x: auto; font-size: .82rem; background: #f4f2ee; padding: .75rem; border-radius: 4px; }
+  .run-head { font-weight: 600; margin-bottom: .5rem; }
+  .muted { color: #6b6862; font-size: .9rem; }
+  footer { border-top: 1px solid var(--line); padding: 1rem 1.25rem; font-size: .85rem; color: #6b6862; }
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="/">RAIPS</a>
+  <a href="https://github.com/JackFeliciano/raips">Repository</a>
+</header>
+<main>
+  <h1>Build a page, publish it</h1>
+  <p class="lead">Pick a section template. The server builds a page object with that section, renders it through the builder in this repository, writes the files and answers with the receipt a hosting panel would have received.</p>
+
+  <div class="grid" id="buttons"></div>
+
+  <div id="out">
+    <span class="muted">Nothing built yet. Pick a template above.</span>
+  </div>
+</main>
+<footer>Every press writes into its own directory on this host. Nothing else is touched.</footer>
+
+<script>
+(async () => {
+  const grid = document.getElementById('buttons');
+  const out = document.getElementById('out');
+  let names = ['hero', 'features', 'pricing', 'faq', 'about'];
+  try {
+    const res = await fetch('/section-names');
+    const data = await res.json();
+    if (Array.isArray(data.sections) && data.sections.length) names = data.sections;
+  } catch (err) {
+    // The fallback list keeps the page usable if the route is missing.
+  }
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  for (const name of names) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = name;
+    b.addEventListener('click', async () => {
+      for (const other of grid.querySelectorAll('button')) other.disabled = true;
+      out.innerHTML = '<span class="muted">Building and publishing...</span>';
+      try {
+        const res = await fetch('/publish', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ section: name }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error((data.error && data.error.message) || 'publish failed');
+        out.innerHTML =
+          '<div class="run-head">Run ' + esc(data.id) + ' published</div>' +
+          '<p><a href="' + esc(data.url) + '" target="_blank" rel="noopener">Open the page it just built</a></p>' +
+          '<p class="muted">' + esc(data.files) + ' files, ' + esc(data.bytes) + ' bytes, section ' + esc(data.section) + '.</p>' +
+          '<pre>' + esc(JSON.stringify(data.manifest, null, 2)) + '</pre>';
+      } catch (err) {
+        out.innerHTML = '<span class="muted">' + esc(err.message) + '</span>';
+      } finally {
+        for (const other of grid.querySelectorAll('button')) other.disabled = false;
+      }
+    });
+    grid.appendChild(b);
+  }
+})();
+</script>
+</body>
+</html>

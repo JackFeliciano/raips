@@ -1,0 +1,32 @@
+[Unit]
+Description=RAIPS live box
+Documentation=https://github.com/JackFeliciano/raips
+After=network.target
+
+[Service]
+Type=simple
+User=raips
+Group=raips
+WorkingDirectory=/srv/raips
+Environment=RAIPS_PORT=8093
+Environment=RAIPS_HOST=127.0.0.1
+Environment=RAIPS_DATA=/var/lib/raips
+Environment=RAIPS_SITE=/srv/raips/showroom
+ExecStart=/usr/bin/node /srv/raips/showroom/server.js
+Restart=always
+RestartSec=3
+
+# The process reads its own files and writes under the data directory. It needs
+# no shell, no home and no writable path anywhere else.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/raips
+MemoryDenyWriteExecute=false
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

@@ -7,3 +7,5 @@ raips.config.json
 .env
 .DS_Store
 Thumbs.db
+.data/
+.smoke*/
