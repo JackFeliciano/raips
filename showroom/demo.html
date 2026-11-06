@@ -47,21 +47,23 @@
 (async () => {
   const grid = document.getElementById('buttons');
   const out = document.getElementById('out');
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // The page sits one level under the routes it calls. It reads its own
+  // directory off the address, climbs one, and puts that in front of every
+  // URL, so the same page works at the root and behind a path prefix.
+  const base = new URL('../', location.href);
+  const at = (p) => new URL(String(p).replace(/^\//, ''), base).pathname;
+
   let names = ['hero', 'features', 'pricing', 'faq', 'about'];
   try {
-    const res = await fetch('section-names');
+    const res = await fetch(at('section-names'));
     const data = await res.json();
     if (Array.isArray(data.sections) && data.sections.length) names = data.sections;
   } catch (err) {
     // The fallback list keeps the page usable if the route is missing.
   }
-
-  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-  // Every URL the page asks for is relative to the directory it was served
-  // from, so the same page works at the root and behind a path prefix.
-  const here = new URL('./', location.href);
-  const at = (p) => new URL(String(p).replace(/^\//, ''), here).pathname;
 
   for (const name of names) {
     const b = document.createElement('button');
@@ -71,7 +73,7 @@
       for (const other of grid.querySelectorAll('button')) other.disabled = true;
       out.innerHTML = '<span class="muted">Building and publishing...</span>';
       try {
-        const res = await fetch('publish', {
+        const res = await fetch(at('publish'), {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ section: name }),
