@@ -267,7 +267,7 @@ function run(section) {
   };
 }
 
-const demoPage = fs.readFileSync(path.join(SITE, 'demo.html'));
+const demoFile = path.join(SITE, 'demo.html');
 
 // ---- the server -----------------------------------------------------------
 
@@ -285,13 +285,25 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (req.method === 'GET' && (p === '/demo' || p === '/demo/')) {
-    res.writeHead(200, {
-      'content-type': 'text/html; charset=utf-8',
-      'content-length': demoPage.length,
-      'cache-control': 'no-store',
+  if (req.method === 'GET' && p === '/demo') {
+    res.writeHead(301, { location: './demo/' });
+    res.end();
+    return;
+  }
+
+  if (req.method === 'GET' && p === '/demo/') {
+    fs.readFile(demoFile, (err, page) => {
+      if (err) {
+        sendJson(res, 500, { error: { code: 'demo_missing', message: 'demo page is not on disk' } });
+        return;
+      }
+      res.writeHead(200, {
+        'content-type': 'text/html; charset=utf-8',
+        'content-length': page.length,
+        'cache-control': 'no-store',
+      });
+      res.end(page);
     });
-    res.end(demoPage);
     return;
   }
 

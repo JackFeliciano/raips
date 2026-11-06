@@ -49,7 +49,7 @@
   const out = document.getElementById('out');
   let names = ['hero', 'features', 'pricing', 'faq', 'about'];
   try {
-    const res = await fetch('/section-names');
+    const res = await fetch('section-names');
     const data = await res.json();
     if (Array.isArray(data.sections) && data.sections.length) names = data.sections;
   } catch (err) {
@@ -57,6 +57,11 @@
   }
 
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // Every URL the page asks for is relative to the directory it was served
+  // from, so the same page works at the root and behind a path prefix.
+  const here = new URL('./', location.href);
+  const at = (p) => new URL(String(p).replace(/^\//, ''), here).pathname;
 
   for (const name of names) {
     const b = document.createElement('button');
@@ -66,7 +71,7 @@
       for (const other of grid.querySelectorAll('button')) other.disabled = true;
       out.innerHTML = '<span class="muted">Building and publishing...</span>';
       try {
-        const res = await fetch('/publish', {
+        const res = await fetch('publish', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ section: name }),
@@ -75,7 +80,7 @@
         if (!res.ok) throw new Error((data.error && data.error.message) || 'publish failed');
         out.innerHTML =
           '<div class="run-head">Run ' + esc(data.id) + ' published</div>' +
-          '<p><a href="' + esc(data.url) + '" target="_blank" rel="noopener">Open the page it just built</a></p>' +
+          '<p><a href="' + esc(at(data.url)) + '" target="_blank" rel="noopener">Open the page it just built</a></p>' +
           '<p class="muted">' + esc(data.files) + ' files, ' + esc(data.bytes) + ' bytes, section ' + esc(data.section) + '.</p>' +
           '<pre>' + esc(JSON.stringify(data.manifest, null, 2)) + '</pre>';
       } catch (err) {
