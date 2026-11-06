@@ -1,18 +1,20 @@
 {
-  "site": {
-    "name": "example-site",
-    "outputDir": "out",
-    "sectionsDir": "sections",
-    "baseUrl": ""
+  "site": { "dir": "examples/site" },
+  "domains": {
+    "driver": "fixture",
+    "keyEnv": "RAIPS_DYNADOT_KEY",
+    "sandbox": true,
+    "showPrice": true,
+    "fixtures": {
+      "cobaltstudio.com": { "available": false },
+      "cobaltstudio.net": { "available": true, "price": "11.90", "currency": "USD" },
+      "cobaltstudio.org": { "available": true, "price": "12.90", "currency": "USD" },
+      "cobaltstudio.io": { "available": false, "price": null },
+      "cobaltstudio.dev": { "available": true, "price": "14.50", "currency": "USD" }
+    }
   },
   "hosting": {
     "driver": "fake",
-    "endpoint": "",
-    "root": "/",
-    "fakeRoot": ".raips/fake-host",
-    "credential": {
-      "keyId": "",
-      "secret": ""
-    }
+    "fakeRoot": ".raips-out"
   }
 }

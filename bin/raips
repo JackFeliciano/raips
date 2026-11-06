@@ -1,0 +1,113 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * The interface a member types at. Four verbs, and each one says what it did.
+ */
+
+require __DIR__ . '/../autoload.php';
+
+use Raips\BuildError;
+use Raips\Config;
+use Raips\Domains\Factory as DomainFactory;
+use Raips\Domains\Panel;
+use Raips\Hosting\PublishError;
+use Raips\Project;
+use Raips\Serve;
+use Raips\Version;
+
+function usage(): int
+{
+    fwrite(STDERR, Version::NAME . ' ' . Version::VERSION . "\n");
+    fwrite(STDERR, "  raips build <dir>            write the site into <dir>/.raips-out\n");
+    fwrite(STDERR, "  raips publish <dir>          build and send it to the host\n");
+    fwrite(STDERR, "  raips preview <dir> [port]   serve the build on http://127.0.0.1:8080\n");
+    fwrite(STDERR, "  raips domains <name> [tlds]  ask the registrar what is free\n");
+
+    return 2;
+}
+
+function fail(string $message, int $code = 1): int
+{
+    fwrite(STDERR, 'raips: ' . $message . "\n");
+
+    return $code;
+}
+
+$argv_ = array_slice($argv, 1);
+$verb = $argv_[0] ?? '';
+$dir = $argv_[1] ?? '.';
+
+try {
+    switch ($verb) {
+        case 'build':
+            $project = Project::load($dir);
+            $problems = $project->problems();
+            if ($problems !== []) {
+                throw new BuildError($problems);
+            }
+            $files = $project->build();
+            $out = rtrim($dir, '/\\') . DIRECTORY_SEPARATOR . '.raips-out';
+            foreach ($files as $file) {
+                $target = $out . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $file['path']);
+                $parent = dirname($target);
+                if (!is_dir($parent)) {
+                    mkdir($parent, 0775, true);
+                }
+                file_put_contents($target, $file['body']);
+            }
+            $bytes = array_sum(array_map(static fn (array $f): int => strlen($f['body']), $files));
+            fwrite(STDOUT, 'built ' . count($files) . ' files, ' . $bytes . " bytes, into " . $out . "\n");
+
+            return 0;
+
+        case 'publish':
+            $project = Project::load($dir);
+            $receipt = $project->publish();
+            $data = $receipt->toArray();
+            fwrite(STDOUT, 'published ' . $data['files'] . ' files, ' . $data['bytes'] . ' bytes, to ' . $data['host']
+                . ($data['root'] === '' ? '' : ' at ' . $data['root']) . "\n");
+
+            return 0;
+
+        case 'preview':
+            $port = isset($argv_[2]) ? (int) $argv_[2] : 8080;
+            Serve::run($dir, '127.0.0.1', $port);
+
+            return 0;
+
+        case 'domains':
+            $name = $argv_[1] ?? '';
+            $tlds = isset($argv_[2]) ? preg_split('/[\s,]+/', $argv_[2]) : [];
+            $config = Config::load('.');
+            $domains = is_array($config->data['domains'] ?? null) ? $config->data['domains'] : [];
+            $panel = new Panel(DomainFactory::create($domains));
+            $rows = $panel->suggestions($name, is_array($tlds) ? array_filter($tlds) : []);
+            foreach ($rows as $row) {
+                $state = match (true) {
+                    ($row['available'] ?? null) === true => 'free',
+                    ($row['available'] ?? null) === false => 'taken',
+                    default => 'unknown',
+                };
+                $price = $row['price'] === null ? '' : ' ' . $row['price'] . ' ' . ($row['currency'] ?? '');
+                fwrite(STDOUT, str_pad((string) $row['domain'], 28) . str_pad($state, 10) . $price . "\n");
+            }
+
+            return 0;
+
+        default:
+            return usage();
+    }
+} catch (BuildError $e) {
+    foreach ($e->problems as $problem) {
+        fwrite(STDERR, 'raips: ' . $problem . "\n");
+    }
+
+    return fail('the build stopped, ' . count($e->problems) . ' problems');
+} catch (PublishError $e) {
+    return fail($e->getMessage() . ' ' . json_encode($e->detail, JSON_UNESCAPED_SLASHES));
+} catch (\Throwable $e) {
+    return fail($e->getMessage());
+}

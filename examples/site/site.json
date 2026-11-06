@@ -1,74 +1,51 @@
 {
   "name": "example-site",
-  "description": "A site built from RAIPS section templates.",
+  "base": "/",
   "lang": "en",
   "pages": [
     {
       "route": "/",
-      "title": "Example site",
-      "description": "One page assembled from section templates.",
+      "title": "Cobalt Studio",
+      "description": "A small studio that builds and hosts sites.",
       "sections": [
         {
           "type": "header",
           "props": {
-            "brand": "Example",
+            "brand": "Cobalt Studio",
+            "cta": { "label": "Write to us", "href": "/contact/" },
             "links": [
-              { "label": "Features", "href": "#features" },
-              { "label": "Pricing", "href": "#pricing" }
-            ],
-            "cta": { "label": "Start", "href": "#contact" }
+              { "label": "Work", "href": "/#work" },
+              { "label": "Writing", "href": "/writing/" }
+            ]
           }
         },
         {
           "type": "hero",
           "props": {
-            "eyebrow": "Section templates",
-            "heading": "A page written as data",
-            "lead": "The builder reads this file and returns HTML. No template language, no build server.",
-            "buttons": [
-              { "label": "Read the tests", "href": "#features", "style": "primary" },
-              { "label": "Preview", "href": "#contact", "style": "secondary" }
-            ]
-          }
-        },
-        {
-          "type": "overview",
-          "props": {
-            "heading": "What is here",
-            "items": [
-              "Thirteen section templates, each one a plain function.",
-              "A builder that rejects an unknown section before it renders anything.",
-              "A publish step that signs every request to the hosting panel."
-            ]
+            "eyebrow": "Studio",
+            "heading": "Sites that stay up",
+            "subheading": "We build the page, host it and keep it answering.",
+            "cta": { "label": "See the work", "href": "/#work" }
           }
         },
         {
           "type": "features",
           "props": {
-            "heading": "Features",
+            "heading": "What you get",
             "items": [
-              { "title": "Builder", "text": "Page JSON in, HTML files out." },
-              { "title": "Preview", "text": "A local server over the built output." },
-              { "title": "Publish", "text": "Signed requests to the hosting API." }
+              { "title": "A page built from sections", "text": "Pick the sections you want and the builder writes the files." },
+              { "title": "A preview before anything goes out", "text": "Look at the site on your own machine first." },
+              { "title": "A publish you can undo", "text": "Every publish lands under an id the host answers back." }
             ]
           }
         },
         {
-          "type": "pricing",
+          "type": "gallery",
           "props": {
-            "heading": "Plans",
-            "plans": [
-              { "name": "Single", "price": "One site", "note": "Builder and preview.", "href": "#contact" },
-              { "name": "Fleet", "price": "Many sites", "note": "Publish to a panel.", "href": "#contact", "featured": true }
-            ]
-          }
-        },
-        {
-          "type": "testimonials",
-          "props": {
-            "heading": "Quotes",
+            "heading": "Work",
             "items": [
-              { "text": "The page is data and the tests run in a second.", "author": "A maintainer", "role": "example" }
+              { "src": "assets/one.png", "alt": "A landing page", "caption": "Landing page" },
+              { "src": "assets/two.png", "alt": "A services page", "caption": "Services page" }
             ]
           }
         },
@@ -77,56 +54,65 @@
           "props": {
             "heading": "Questions",
             "items": [
-              { "q": "Where do the hosting keys live?", "a": "In raips.config.json, which stays out of git." },
-              { "q": "Can I publish without a credential?", "a": "The fake driver accepts a publish and keeps it on disk." }
+              { "question": "Where does the site live?", "answer": "Wherever you point the host driver at." },
+              { "question": "Can I keep the files?", "answer": "Yes. A build writes plain files you can copy." }
             ]
-          }
-        },
-        {
-          "type": "callout",
-          "props": {
-            "heading": "Ready to publish",
-            "text": "Fill the sample config and run the publish verb.",
-            "cta": "Contact",
-            "href": "#contact"
           }
         },
         {
           "type": "contact",
           "props": {
-            "heading": "Contact",
-            "cta": "Send"
+            "heading": "Say hello",
+            "text": "One address, and a person answers it.",
+            "href": "mailto:hello@example.com",
+            "cta": "Send a note"
           }
         },
         {
           "type": "footer",
           "props": {
-            "brand": "Example",
-            "links": [{ "label": "Top", "href": "#" }],
-            "social": [{ "label": "Repository", "href": "https://example.invalid/repo" }],
-            "legal": "Example content.",
-            "copyright": "Example site."
+            "text": "Cobalt Studio, 2026.",
+            "links": [
+              { "label": "Writing", "href": "/writing/" },
+              { "label": "Contact", "href": "/contact/" }
+            ]
           }
         }
       ]
     },
     {
-      "route": "/about",
-      "title": "About the example",
-      "description": "The second page of the sample site.",
+      "route": "/writing/",
+      "title": "Writing, Cobalt Studio",
       "sections": [
-        { "type": "header", "props": { "brand": "Example", "links": [{ "label": "Home", "href": "/" }] } },
+        { "type": "header", "props": { "brand": "Cobalt Studio" } },
         {
-          "type": "about",
+          "type": "blog",
           "props": {
-            "heading": "About",
-            "paragraphs": [
-              "Every section on this page comes from a function in src/sections.",
-              "The builder renders the same way for one page and for fifty."
+            "heading": "Writing",
+            "posts": [
+              { "title": "A build you can read", "date": "2026-10-01", "text": "Plain files, one folder, one stylesheet." },
+              { "title": "Why the preview matters", "date": "2026-09-14", "text": "A member looks at the page before it costs anything." }
             ]
           }
         },
-        { "type": "footer", "props": { "brand": "Example", "copyright": "Example site." } }
+        { "type": "footer", "props": { "text": "Cobalt Studio, 2026." } }
+      ]
+    },
+    {
+      "route": "/contact/",
+      "title": "Contact, Cobalt Studio",
+      "sections": [
+        { "type": "header", "props": { "brand": "Cobalt Studio" } },
+        {
+          "type": "contact",
+          "props": {
+            "heading": "Contact",
+            "text": "Write to the address below and a person answers.",
+            "href": "mailto:hello@example.com",
+            "cta": "Send a note"
+          }
+        },
+        { "type": "footer", "props": { "text": "Cobalt Studio, 2026." } }
       ]
     }
   ]

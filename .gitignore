@@ -1,11 +1,5 @@
-node_modules/
-dist/
-out/
-.raips/
 raips.config.json
-*.local.json
-.env
-.DS_Store
-Thumbs.db
-.data/
+.raips-out/
 .smoke*/
+*.log
+
